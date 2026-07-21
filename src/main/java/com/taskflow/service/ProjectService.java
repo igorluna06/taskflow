@@ -33,24 +33,36 @@ public class ProjectService {
     }
 
     public Project create(ProjectRequest request) {
-        User owner = null;
-        if (request.getOwnerId() != null) {
-            owner = userRepository.findById(request.getOwnerId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id " + request.getOwnerId()));
-        }
+        User owner = resolveOwner(request.getOwnerId());
         Project project = new Project(request.getName(), request.getDescription(), owner);
         return projectRepository.save(project);
     }
 
+    /**
+     * Atualiza nome(sempre obrigatório) e descrição.
+     * Owner é opcional: se nao enviado, mantem o dono atual do projeto.
+     */
     public Project update(Long id, ProjectRequest request) {
         Project project = findById(id);
         project.setName(request.getName());
         project.setDescription(request.getDescription());
+        if (request.getOwnerId() != null) {
+            User owner = resolveOwner(request.getOwnerId());
+            project.setOwner(owner);
+        }
         return projectRepository.save(project);
     }
 
     public void delete(Long id) {
         Project project = findById(id);
         projectRepository.delete(project);
+    }
+
+    private User resolveOwner(Long ownerId) {
+        if (ownerId == null) {
+            return null;
+        }
+        return userRepository.findById(ownerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id " + ownerId));
     }
 }
