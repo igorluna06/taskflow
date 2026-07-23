@@ -2,6 +2,7 @@ package com.taskflow.controller;
 
 import com.taskflow.dto.TaskRequest;
 import com.taskflow.model.Task;
+import com.taskflow.model.TaskStatus;
 import com.taskflow.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getAllTasksByProjectId(@PathVariable Long projectId) {
-        return this.taskService.findAllByProjectId(projectId);}
+    public List<Task> getAllTasksByProjectId(@PathVariable Long projectId, @RequestParam(required = false) TaskStatus status) {
+        return this.taskService.findAllByProjectId(projectId,  status);}
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

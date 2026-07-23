@@ -4,6 +4,7 @@ import com.taskflow.dto.TaskRequest;
 import com.taskflow.exception.ResourceNotFoundException;
 import com.taskflow.model.Project;
 import com.taskflow.model.Task;
+import com.taskflow.model.TaskStatus;
 import com.taskflow.repository.ProjectRepository;
 import com.taskflow.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class TaskService {
         this.projectRepository = projectRepository;
     }
 
-    public List<Task> findAllByProjectId(Long projectId) {
-        return taskRepository.findByProjectId(projectId);
+    public List<Task> findAllByProjectId(Long projectId, TaskStatus status) {
+        return taskRepository.findByProjectIdAndOptionalStatus(projectId,  status);
     }
 
     public Task findById(Long projectId, Long taskId) {
