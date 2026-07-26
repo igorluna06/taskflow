@@ -1,4 +1,4 @@
-package com.taskflow.task;
+package com.taskflow.service;
 
 import com.taskflow.dto.TaskRequest;
 import com.taskflow.exception.ResourceNotFoundException;
