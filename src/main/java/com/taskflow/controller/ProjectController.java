@@ -1,6 +1,7 @@
 package com.taskflow.controller;
 
 import com.taskflow.dto.ProjectRequest;
+import com.taskflow.dto.ProjectResponse;
 import com.taskflow.model.Project;
 import com.taskflow.service.ProjectService;
 import jakarta.validation.Valid;
@@ -23,29 +24,40 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<Project> findAll() {
-        return projectService.findAll();
+    public List<ProjectResponse> findAll() {
+        List<Project> projects = projectService.findAll();
+        return projects.stream().map(this::toResponse).toList();
     }
 
     @GetMapping("/{id}")
-    public Project findById(@PathVariable Long id) {
-        return projectService.findById(id);
+    public ProjectResponse findById(@PathVariable Long id) {
+        return this.toResponse(projectService.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Project create(@Valid @RequestBody ProjectRequest request) {
-        return projectService.create(request);
+    public ProjectResponse create(@Valid @RequestBody ProjectRequest request) {
+        return this.toResponse(projectService.create(request));
     }
 
     @PutMapping("/{id}")
-    public Project update(@PathVariable Long id, @Valid @RequestBody ProjectRequest request) {
-        return projectService.update(id, request);
+    public ProjectResponse update(@PathVariable Long id, @Valid @RequestBody ProjectRequest request) {
+        return this.toResponse(projectService.update(id, request));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         projectService.delete(id);
+    }
+
+    private ProjectResponse toResponse(Project project) {
+        return new ProjectResponse(
+                project.getId(),
+                project.getName(),
+                project.getDescription(),
+                project.getOwner().getId(),
+                project.getCreatedAt()
+        );
     }
 }

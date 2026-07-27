@@ -1,6 +1,7 @@
 package com.taskflow.controller;
 
 import com.taskflow.dto.TaskRequest;
+import com.taskflow.dto.TaskResponse;
 import com.taskflow.model.Task;
 import com.taskflow.model.TaskStatus;
 import com.taskflow.service.TaskService;
@@ -23,28 +24,41 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getAllTasksByProjectId(@PathVariable Long projectId, @RequestParam(required = false) TaskStatus status) {
-        return this.taskService.findAllByProjectId(projectId,  status);}
+    public List<TaskResponse> getAllTasksByProjectId(@PathVariable Long projectId, @RequestParam(required = false) TaskStatus status) {
+        List<Task> tasks = this.taskService.findAllByProjectId(projectId,  status);
+
+        return tasks.stream().map(this::toResponse).toList();}
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task create(@PathVariable Long projectId, @Valid @RequestBody TaskRequest request) {
-        return this.taskService.create(projectId,request);
+    public TaskResponse create(@PathVariable Long projectId, @Valid @RequestBody TaskRequest request) {
+        return this.toResponse(this.taskService.create(projectId,request));
     }
 
     @GetMapping("/{taskId}")
-    public Task getTaskById(@PathVariable Long projectId, @PathVariable Long taskId) {
-        return this.taskService.findById(projectId,taskId);
+    public TaskResponse getTaskById(@PathVariable Long projectId, @PathVariable Long taskId) {
+        return this.toResponse(this.taskService.findById(projectId,taskId));
     }
 
     @PutMapping("/{taskId}")
-    public Task update(@PathVariable Long projectId, @PathVariable Long taskId, @Valid @RequestBody TaskRequest request) {
-        return this.taskService.update(projectId,taskId, request);
+    public TaskResponse update(@PathVariable Long projectId, @PathVariable Long taskId, @Valid @RequestBody TaskRequest request) {
+        return this.toResponse(this.taskService.update(projectId,taskId, request));
     }
 
     @DeleteMapping("/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long projectId, @PathVariable Long taskId) {
         this.taskService.delete(projectId,taskId);
+    }
+
+    private TaskResponse toResponse(Task task) {
+        return new TaskResponse(
+                task.getId(),
+                task.getProject().getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getAssignee() != null ? task.getAssignee().getId() : null
+        );
     }
 }
