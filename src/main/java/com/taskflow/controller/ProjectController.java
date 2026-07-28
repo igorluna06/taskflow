@@ -6,6 +6,8 @@ import com.taskflow.model.Project;
 import com.taskflow.service.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +26,9 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<ProjectResponse> findAll() {
-        List<Project> projects = projectService.findAll();
-        return projects.stream().map(this::toResponse).toList();
+    public Page<ProjectResponse> findAll(Pageable pageable) {
+        return projectService.findAll(pageable)
+                .map(this::toResponse);
     }
 
     @GetMapping("/{id}")
