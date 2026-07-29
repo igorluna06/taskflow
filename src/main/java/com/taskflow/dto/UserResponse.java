@@ -1,6 +1,5 @@
 package com.taskflow.dto;
 
-import jakarta.validation.constraints.NotNull;
 
 public class UserResponse {
 
