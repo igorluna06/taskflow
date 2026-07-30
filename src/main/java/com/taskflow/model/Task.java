@@ -35,11 +35,12 @@ public class Task {
     public Task() {
     }
 
-    public Task(String title, String description, Project project) {
+    public Task(String title, String description, LocalDate dueDate, Project project) {
         this.title = title;
         this.description = description;
         this.project = project;
         this.status = TaskStatus.TODO;
+        this.dueDate = dueDate;
     }
 
     public Long getId() {

@@ -1,9 +1,12 @@
 package com.taskflow.dto;
 
 import com.taskflow.model.TaskStatus;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 
 public class TaskRequest {
 
@@ -19,6 +22,9 @@ public class TaskRequest {
 
     private Long assigneeId;
 
+    @FutureOrPresent(message = "A data de prazo deve ser após a data atual")
+    private LocalDate dueDate;
+
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public String getDescription() { return description; }
@@ -27,5 +33,7 @@ public class TaskRequest {
     public void setStatus(TaskStatus status) { this.status = status; }
     public Long getAssigneeId() { return assigneeId; }
     public void setAssigneeId(Long assigneeId) { this.assigneeId = assigneeId; }
+    public LocalDate getDueDate() { return dueDate; }
+    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
 }
