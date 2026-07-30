@@ -70,6 +70,12 @@ public class TaskService {
         return this.taskRepository.save(task);
     }
 
+    public Task updateStatus(Long projectId, Long taskId, TaskStatus status) {
+        Task task = this.findById(projectId,taskId);
+        task.setStatus(status);
+        return this.taskRepository.save(task);
+    }
+
     public void delete(Long projectId, Long taskId) {
         Task task = this.findById(projectId,taskId);
         this.taskRepository.delete(task);

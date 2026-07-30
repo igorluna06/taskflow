@@ -45,6 +45,11 @@ public class TaskController {
         return this.toResponse(this.taskService.update(projectId,taskId, request));
     }
 
+    @PatchMapping("/{taskId}/status")
+    public TaskResponse updateStatus(@PathVariable Long projectId, @PathVariable Long taskId, @Valid @RequestBody TaskStatus status) {
+        return this.toResponse(this.taskService.updateStatus(projectId,taskId,status));
+    }
+
     @DeleteMapping("/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long projectId, @PathVariable Long taskId) {
