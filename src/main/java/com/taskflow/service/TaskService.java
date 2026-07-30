@@ -50,7 +50,7 @@ public class TaskService {
                             + projectId));
 
 
-        Task task = new Task(request.getTitle(), request.getDescription(), project);
+        Task task = new Task(request.getTitle(), request.getDescription(), request.getDueDate() , project);
         task.setAssignee(resolveAssignee(request.getAssigneeId()));
         return this.taskRepository.save(task);
     }
@@ -63,6 +63,9 @@ public class TaskService {
         User assignee = resolveAssignee(request.getAssigneeId());
         if(assignee != null){
             task.setAssignee(assignee);
+        }
+        if(request.getDueDate() != null){
+            task.setDueDate(request.getDueDate());
         }
         return this.taskRepository.save(task);
     }

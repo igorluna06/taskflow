@@ -53,12 +53,13 @@ public class TaskController {
 
     private TaskResponse toResponse(Task task) {
         return new TaskResponse(
-                task.getId(),
                 task.getProject().getId(),
+                task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getStatus(),
-                task.getAssignee() != null ? task.getAssignee().getId() : null
+                task.getAssignee() != null ? task.getAssignee().getId() : null,
+                task.getDueDate()
         );
     }
 }
