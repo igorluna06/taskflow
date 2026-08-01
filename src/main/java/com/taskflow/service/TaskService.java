@@ -1,6 +1,7 @@
 package com.taskflow.service;
 
 import com.taskflow.dto.TaskRequest;
+import com.taskflow.dto.TaskStatusRequest;
 import com.taskflow.exception.ResourceNotFoundException;
 import com.taskflow.model.Project;
 import com.taskflow.model.Task;
@@ -67,6 +68,12 @@ public class TaskService {
         if(request.getDueDate() != null){
             task.setDueDate(request.getDueDate());
         }
+        return this.taskRepository.save(task);
+    }
+
+    public Task updateStatus(Long projectId, Long taskId, TaskStatusRequest statusRequest) {
+        Task task = this.findById(projectId,taskId);
+        task.setStatus(statusRequest.getStatus());
         return this.taskRepository.save(task);
     }
 

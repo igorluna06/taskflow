@@ -2,6 +2,7 @@ package com.taskflow.controller;
 
 import com.taskflow.dto.TaskRequest;
 import com.taskflow.dto.TaskResponse;
+import com.taskflow.dto.TaskStatusRequest;
 import com.taskflow.model.Task;
 import com.taskflow.model.TaskStatus;
 import com.taskflow.service.TaskService;
@@ -43,6 +44,12 @@ public class TaskController {
     @PutMapping("/{taskId}")
     public TaskResponse update(@PathVariable Long projectId, @PathVariable Long taskId, @Valid @RequestBody TaskRequest request) {
         return this.toResponse(this.taskService.update(projectId,taskId, request));
+    }
+
+    @PatchMapping("/{taskId}/status")
+    public TaskResponse updateStatus(@PathVariable Long projectId, @PathVariable Long taskId,
+                                     @Valid @RequestBody TaskStatusRequest statusRequest) {
+        return this.toResponse(this.taskService.updateStatus(projectId,taskId,statusRequest));
     }
 
     @DeleteMapping("/{taskId}")
